@@ -65,11 +65,36 @@
 
 -   Utilizamos los siguientes comandos:
 
-        ```shell
-        composer require laravel/ui
-        php artisan ui bootstrap --auth
-        npm install
-        npm run dev
+    ```shell
+      composer require laravel/ui
+      php artisan ui bootstrap --auth
+      npm install
+      npm run dev
+    ```
+
+-   Aplicar medidas de seguridad:
+
+    -   [Refrencia](https://pentest-tools.com/blog/laravel-application-security-guide#1-use-strong-passwords)
+    -   Usando un password fuerte:
+        app/Http/Controllers/Auth/RegisterController.php
+
+        ```php
+        protected function validator(array $data)
+        {
+            return Validator::make($data, [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'password' => [
+                    'required', 'string', 'min:8', 'confirmed',
+                    Password_new::min(8)
+                        ->letters()
+                        ->mixedCase()
+                        ->numbers()
+                        ->symbols()
+                        ->uncompromised()
+                ],
+            ]);
+        }
         ```
 
     END
